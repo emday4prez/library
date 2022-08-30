@@ -8,19 +8,40 @@ function Book(title, author, pages, read){
   return `${this.title} by ${this.author} has ${this.pages} pages.`
  }
 }
-
 const theHobbit = new Book('The Hobbit', 'J.R.R. Tolkien', 295, false)
 const fireAndIce = new Book('A Song of Fire and Ice', 'George R.R. Martin', 893, false)
-
-function addBookToLibrary(){
- newBook = new Book(title, authors, pages, read)
- myLibrary.push(newBook)
-}
 
 let myLibrary = [theHobbit, fireAndIce]
 let table = document.getElementById('di-library');
 
+function addBookToLibrary(title, author, pages, read){
+ newBook = new Book(title, author, pages, read)
+ myLibrary.push(newBook)
+
+let tr = document.createElement('tr')
+
+ Object.entries(newBook).forEach(value => {
+  const [key, val] = value
+  
+  if(typeof val !== 'function'){
+   let td = document.createElement('td');
+   td.innerText = val
+   tr.appendChild(td);
+  }
+  
+ });
+table.appendChild(tr);
+}
+
+
+
 function displayData(array){
+ // let allData = document.querySelectorAll('td')
+ // if(allData.length > 0){
+ //  table.removeChild(allData)
+ // }
+
+
  array.forEach(item => {
  let tr = document.createElement('tr');
 
@@ -38,21 +59,24 @@ function displayData(array){
 })
 }
 
-displayData(myLibrary);
 
-var outputParagraph = document.querySelector('#quote')
+
+displayData(myLibrary)
+
 
 var editValueButton = document.querySelector('button')
 var backdrop;
 var modal;
 var demoContainer = document.querySelector('.demo-container')
 // var textEdit = document.querySelector('.modal textarea')
-var quote = 'a modal component on a webpage --- can you do it?'
+var newTitle = ''
+var newAuthor = ''
+var numberOfPages = null
+var hasReadNewBook = false
+var quote = 'add your favorite books to the list!'
 var editedQuote = ''
 
-function updateParagraph(){
- outputParagraph.textContent = quote;
-}
+
 
 function closeModal(){
  if(backdrop){
@@ -62,7 +86,7 @@ function closeModal(){
   modal.remove()
  }
 }
-updateParagraph();
+
 
 
 
@@ -78,20 +102,66 @@ editValueButton.addEventListener('click', function(){
  modal.classList.add('modal')
 
  var modalHeading = document.createElement('h1')
- modalHeading.textContent = 'edit your statement'
+ modalHeading.textContent = 'add a book'
  modal.appendChild(modalHeading)
 
  var textEditContainer = document.createElement('div')
  textEditContainer.classList.add('modal-input')
  modal.appendChild(textEditContainer)
 
-var textEditArea = document.createElement('textarea')
-textEditArea.rows = '3';
-textEditArea.addEventListener('input', function(){
-  editedQuote = textEditArea.value
- })
- textEditArea.value = quote
-textEditContainer.appendChild(textEditArea)
+var titleInput = document.createElement('input')
+titleInput.setAttribute('placeholder', 'title')
+titleInput.setAttribute('type', 'text')
+titleInput.addEventListener('input', function(){
+ newTitle = titleInput.value
+})
+textEditContainer.appendChild(titleInput)
+
+var authorInput = document.createElement('input')
+authorInput.setAttribute('placeholder', 'author')
+authorInput.setAttribute('type', 'text')
+authorInput.addEventListener('input', function(){
+ newAuthor = authorInput.value
+})
+textEditContainer.appendChild(authorInput)
+
+
+var pagesInput = document.createElement('input')
+pagesInput.setAttribute('placeholder', 'pages')
+pagesInput.setAttribute('type', 'number')
+pagesInput.addEventListener('input', function(){
+ numberOfPages = pagesInput.value
+})
+textEditContainer.appendChild(pagesInput)
+
+var checkboxDiv = document.createElement('div')
+
+var readInput = document.createElement('input')
+readInput.setAttribute('type', 'checkbox')
+readInput.setAttribute('name', 'completed')
+readInput.setAttribute('value', 'completed')
+readInput.addEventListener('change', function(){
+ if(this.checked){
+  hasReadNewBook = true
+ }else{
+  hasReadNewBook = false
+ }
+})
+
+var readLabel = document.createElement('label')
+readLabel.setAttribute('for', 'completed')
+readLabel.textContent = 'I have read this book.'
+checkboxDiv.appendChild(readInput)
+checkboxDiv.appendChild(readLabel)
+textEditContainer.appendChild(checkboxDiv)
+
+// var textEditArea = document.createElement('textarea')
+// textEditArea.rows = '3';
+// textEditArea.addEventListener('input', function(){
+//   editedQuote = textEditArea.value
+//  })
+//  textEditArea.value = quote
+// textEditContainer.appendChild(textEditArea)
 
 
 var modalActionsContainer = document.createElement('div');
@@ -111,10 +181,24 @@ var modalActionsContainer = document.createElement('div');
  confirmButton.textContent = 'confirm'
  confirmButton.addEventListener('click', function(){
   closeModal()
-  if(editedQuote.trim().length > 0){
-   quote = editedQuote;
-   updateParagraph()
+  if(newTitle.trim().length > 0 && newAuthor.trim().length > 0){
+   addBookToLibrary(newTitle, newAuthor, numberOfPages, hasReadNewBook)
+   
+   newTitle = ''
+   newAuthor = ''
+   numberOfPages = null;
+   hasReadNewBook = false;
+
+   authorInput.value = ''
+   titleInput.value = ''
+   pagesInput.value = null;
+   readInput.checked = false
+
+   
+  }else{
+   alert('must include title and author')
   }
+  
  })
  modalActionsContainer.appendChild(confirmButton)
 
