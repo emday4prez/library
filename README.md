@@ -11,12 +11,10 @@
   <p align="center">
    A list of books
     <br />
-   s -->
-    <br />
     <a href="https://emday4prez.github.io/library/">View Demo</a>
     ·
     <a href="https://emday4prez.github.io/library/issues">Report Bug</a>
-    ·
+    
 
   </p>
 </div>
