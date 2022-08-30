@@ -135,6 +135,12 @@ button.btn-comfirm:active {
  background: green;
 }
 
+button.btn-delete{
+ border: none;
+ background: gray;
+ color: white;
+}
+
 .backdrop {
  position: fixed;
  width: 100%;

@@ -33,17 +33,14 @@ let tr = document.createElement('tr')
 table.appendChild(tr);
 }
 
-
-
+function deleteRow(event){
+ 
+}
 function displayData(array){
- // let allData = document.querySelectorAll('td')
- // if(allData.length > 0){
- //  table.removeChild(allData)
- // }
 
-
- array.forEach(item => {
+ array.forEach((item, i) => {
  let tr = document.createElement('tr');
+ tr.setAttribute('id', i)
 
  Object.entries(item).forEach(value => {
   const [key, val] = value
@@ -55,7 +52,21 @@ function displayData(array){
   }
   
  });
+ var deleteButton = document.createElement('button')
+ deleteButton.classList.add('btn-delete')
+ deleteButton.textContent = 'delete'
+ deleteButton.setAttribute('id', i)
+ tr.appendChild(deleteButton)
+
+
+
  table.appendChild(tr);
+
+  deleteButton.addEventListener('click', function(e){
+  console.log(e.target)
+  const row = document.getElementById(`${e.target.id}`)
+  table.removeChild(row)
+ })
 })
 }
 
