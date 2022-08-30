@@ -17,8 +17,9 @@ let table = document.getElementById('di-library');
 function addBookToLibrary(title, author, pages, read){
  newBook = new Book(title, author, pages, read)
  myLibrary.push(newBook)
-
-let tr = document.createElement('tr')
+ libraryLength = myLibrary.length
+ let tr = document.createElement('tr')
+ tr.setAttribute('id', libraryLength)
 
  Object.entries(newBook).forEach(value => {
   const [key, val] = value
@@ -28,9 +29,20 @@ let tr = document.createElement('tr')
    td.innerText = val
    tr.appendChild(td);
   }
-  
  });
-table.appendChild(tr);
+
+ var deleteButton = document.createElement('button')
+ deleteButton.classList.add('btn-delete')
+ deleteButton.textContent = 'delete'
+ deleteButton.setAttribute('id', libraryLength)
+ tr.appendChild(deleteButton)
+ table.appendChild(tr);
+ 
+ deleteButton.addEventListener('click', function(e){
+  const row = document.getElementById(`${e.target.id}`)
+  table.removeChild(row)
+ })
+
 }
 
 function deleteRow(event){
@@ -57,8 +69,6 @@ function displayData(array){
  deleteButton.textContent = 'delete'
  deleteButton.setAttribute('id', i)
  tr.appendChild(deleteButton)
-
-
 
  table.appendChild(tr);
 
